@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="OCAP Principles in Practice: What Data Sovereignty Actually Looks Like — Null&Void Analytics Blog">
+<title>OCAP Principles in Practice: What Data Sovereignty Actually Looks Like | Null&amp;Void Analytics Inc.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#0c1220;--navy2:#101929;--navy3:#141f32;
+  --card:#18243a;--card2:#1d2c45;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --blue:#4f8ef7;--blue-light:#7aaefb;--blue-glow:rgba(79,142,247,0.14);
+  --cyan:#22d3ee;--emerald:#10b981;--amber:#f59e0b;--red:#f87171;--purple:#a78bfa;
+  --text:#e8edf8;--text2:#8fa3c8;--text3:#4a607f;
+  --mono:'JetBrains Mono',monospace;
+  --display:'Outfit',sans-serif;
+  --body:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--navy);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.75;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(79,142,247,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(79,142,247,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;align-items:center;padding:0 52px;justify-content:space-between;background:rgba(12,18,32,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.logo-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;flex-shrink:0;}
+.logo-name{font-family:var(--display);font-size:16px;font-weight:700;color:var(--text);line-height:1;}
+.logo-name span{color:var(--blue-light);}
+.logo-sub{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
+nav ul{list-style:none;display:flex;align-items:center;gap:32px;}
+nav ul a{color:var(--text2);text-decoration:none;font-size:14px;font-weight:400;transition:color 0.2s;}
+nav ul a:hover{color:var(--text);}
+.nav-dropdown{position:relative;}
+.nav-dropdown > a::after{content:' ▾';font-size:10px;}
+.nav-dropdown-menu{display:none;position:absolute;top:100%;left:0;background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:8px;min-width:220px;margin-top:8px;box-shadow:0 20px 60px rgba(0,0,0,0.4);}
+.nav-dropdown:hover .nav-dropdown-menu{display:flex;flex-direction:column;gap:2px;}
+.nav-dropdown-menu a{display:block;padding:9px 14px;color:var(--text2);text-decoration:none;font-size:13px;border-radius:8px;transition:all 0.15s;white-space:nowrap;}
+.nav-dropdown-menu a:hover{background:var(--blue-glow);color:var(--blue-light);}
+.nav-pill{background:var(--blue)!important;color:#fff!important;padding:9px 22px;border-radius:100px;font-weight:600!important;font-size:13px!important;transition:all 0.2s!important;letter-spacing:0.2px;}
+.nav-pill:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(79,142,247,0.4)!important;}
+
+/* FOOTER */
+footer{background:var(--navy);border-top:1px solid var(--border);padding:56px 52px 36px;position:relative;z-index:1;}
+.footer-inner{max-width:1240px;margin:0 auto;}
+.footer-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:52px;margin-bottom:44px;}
+.footer-logo-name{font-family:var(--display);font-size:16px;font-weight:700;color:var(--text);}
+.footer-logo-name span{color:var(--blue-light);}
+.footer-brand p{color:var(--text3);font-size:13px;line-height:1.7;font-weight:300;margin-top:14px;max-width:240px;}
+.footer-col h5{font-family:var(--mono);font-size:9px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:16px;}
+.footer-col ul{list-style:none;}
+.footer-col ul li{margin-bottom:9px;}
+.footer-col ul li a{color:var(--text2);text-decoration:none;font-size:13px;font-weight:300;transition:color 0.2s;}
+.footer-col ul li a:hover{color:var(--text);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--border);font-size:12px;color:var(--text3);font-weight:300;}
+.footer-bottom span{font-family:var(--mono);font-size:10px;letter-spacing:0.5px;}
+
+/* COMMON COMPONENTS */
+.section-wrap{max-width:1240px;margin:0 auto;padding:88px 52px;}
+.page-hero{padding:140px 52px 72px;max-width:1240px;margin:0 auto;position:relative;z-index:1;}
+.ph-kicker{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--blue-light);letter-spacing:2px;text-transform:uppercase;margin-bottom:18px;}
+.ph-kicker::before{content:'';width:20px;height:1px;background:var(--blue);}
+h1{font-family:var(--display);font-size:clamp(38px,5vw,64px);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:22px;color:var(--text);}
+h1 em{font-style:normal;color:var(--blue-light);}
+h2{font-family:var(--display);font-size:clamp(28px,3.5vw,44px);font-weight:800;letter-spacing:-1px;line-height:1.1;color:var(--text);}
+h3{font-family:var(--display);font-size:20px;font-weight:700;letter-spacing:-0.3px;color:var(--text);}
+h4{font-family:var(--display);font-size:15px;font-weight:700;color:var(--text);}
+p{color:var(--text2);line-height:1.75;font-weight:300;}
+.lead{font-size:18px;color:var(--text2);line-height:1.7;font-weight:300;max-width:620px;}
+.sec-kicker{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--blue-light);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;}
+.sec-kicker::before{content:'';width:20px;height:1px;background:var(--blue);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:32px;transition:all 0.25s;}
+.card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,0.25);}
+.card h3{margin-bottom:12px;}
+.card p{font-size:14px;margin-bottom:0;}
+.card-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.card-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+.tag-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px;}
+.tag{font-family:var(--mono);font-size:10px;padding:4px 11px;border-radius:7px;border:1px solid var(--border2);color:var(--text3);}
+.tag.blue{border-color:rgba(79,142,247,0.3);color:var(--blue-light);background:rgba(79,142,247,0.06);}
+.tag.cyan{border-color:rgba(34,211,238,0.3);color:var(--cyan);background:rgba(34,211,238,0.06);}
+.tag.green{border-color:rgba(16,185,129,0.3);color:var(--emerald);background:rgba(16,185,129,0.06);}
+.tag.amber{border-color:rgba(245,158,11,0.3);color:var(--amber);background:rgba(245,158,11,0.06);}
+.btn-pri{background:var(--blue);color:#fff;padding:14px 30px;border-radius:10px;font-weight:600;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:9px;transition:all 0.22s;font-family:var(--display);border:none;cursor:pointer;}
+.btn-pri:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(79,142,247,0.38);}
+.btn-sec{background:var(--card);color:var(--text);padding:14px 30px;border-radius:10px;font-weight:400;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:9px;border:1px solid var(--border2);transition:all 0.22s;font-family:var(--display);}
+.btn-sec:hover{background:var(--card2);border-color:rgba(255,255,255,0.2);transform:translateY(-2px);}
+.callout{border-radius:14px;padding:22px;margin:24px 0;display:flex;gap:14px;align-items:flex-start;}
+.callout.blue{background:var(--blue-glow);border:1px solid rgba(79,142,247,0.2);}
+.callout.green{background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2);}
+.callout.amber{background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);}
+.callout-icon{font-size:20px;flex-shrink:0;}
+.callout h4{font-size:13px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.callout.blue h4{color:var(--blue-light);}
+.callout.green h4{color:var(--emerald);}
+.callout.amber h4{color:var(--amber);}
+.callout p{font-size:14px;margin-bottom:0;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:40px 0;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;}
+.stat-num{font-family:var(--display);font-size:36px;font-weight:800;letter-spacing:-1px;color:var(--blue-light);line-height:1;margin-bottom:8px;}
+.stat-label{font-size:13px;color:var(--text3);}
+.divider{height:1px;background:var(--border);margin:56px 0;}
+.cta-band{background:var(--card);border-top:1px solid var(--border);padding:72px 52px;text-align:center;position:relative;z-index:1;}
+.cta-band h2{margin-bottom:16px;}
+.cta-band p{max-width:520px;margin:0 auto 36px;font-size:16px;}
+.cta-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.reveal.in{opacity:1;transform:none;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+.process-steps{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--border);padding-left:0;margin:32px 0;}
+.step{display:flex;gap:24px;padding:0 0 32px 32px;position:relative;}
+.step:last-child{padding-bottom:0;}
+.step::before{content:'';position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--blue);border:2px solid var(--navy);}
+.step-num{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;display:block;}
+.step h4{margin-bottom:8px;}
+.step p{font-size:14px;}
+@media(max-width:1024px){.footer-grid{grid-template-columns:1fr 1fr;gap:36px;}.card-grid-3{grid-template-columns:repeat(2,1fr);}.stat-grid{grid-template-columns:repeat(2,1fr);}.two-col{grid-template-columns:1fr;gap:40px;}}
+@media(max-width:768px){nav{padding:0 20px;}nav ul{display:none;}.page-hero,.section-wrap{padding-left:20px;padding-right:20px;}.card-grid-3,.card-grid-2{grid-template-columns:1fr;}footer{padding:40px 20px 24px;}.footer-grid{grid-template-columns:1fr;gap:28px;}.cta-band{padding:52px 20px;}}
+
+
+.page-hero{padding:140px 52px 72px;max-width:1240px;margin:0 auto;position:relative;z-index:1;}
+.post-layout{max-width:1240px;margin:0 auto;padding:0 52px 80px;display:grid;grid-template-columns:1fr 320px;gap:48px;position:relative;z-index:1;}
+.article{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:48px 52px;}
+.article h2{font-family:var(--display);font-size:clamp(22px,3vw,28px);font-weight:800;letter-spacing:-0.8px;margin:36px 0 16px;}
+.article h3{font-family:var(--display);font-size:20px;font-weight:700;margin:28px 0 12px;}
+.article p{color:var(--text2);font-size:15px;line-height:1.8;margin-bottom:16px;font-weight:300;}
+.article strong{color:var(--text);font-weight:600;}
+.article ul,.article ol{margin:16px 0 20px 24px;display:flex;flex-direction:column;gap:8px;}
+.article li{color:var(--text2);font-size:15px;line-height:1.7;font-weight:300;}
+.article .pullquote{background:var(--card2);border-left:3px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 24px;margin:24px 0;font-family:var(--display);font-size:18px;font-weight:600;color:var(--text);line-height:1.5;font-style:italic;}
+.article-sidebar{display:flex;flex-direction:column;gap:20px;position:sticky;top:88px;align-self:flex-start;}
+.aside-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;}
+.aside-card h4{font-family:var(--display);font-size:14px;font-weight:700;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+@media(max-width:1024px){.post-layout{grid-template-columns:1fr;}.article-sidebar{position:static;}}
+@media(max-width:768px){.page-hero,.post-layout{padding-left:20px;padding-right:20px;}.article{padding:28px 20px;}}
+
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1.5" fill="rgba(255,255,255,0.85)"/><rect x="9" y="2" width="5" height="5" rx="1.5" fill="rgba(255,255,255,0.45)"/><rect x="2" y="9" width="5" height="5" rx="1.5" fill="rgba(255,255,255,0.45)"/><rect x="9" y="9" width="5" height="5" rx="1.5" fill="rgba(255,255,255,0.85)"/></svg></div>
+    <div><div class="logo-name">Null<span>&amp;Void</span></div><div class="logo-sub">Analytics Inc.</div></div>
+  </a>
+  <ul>
+    <li class="nav-dropdown"><a href="index.html#services">Services</a>
+      <div class="nav-dropdown-menu">
+        <a href="healthcare.html">🏥 Healthcare Analytics</a>
+        <a href="justice.html">⚖️ Justice &amp; Safety</a>
+        <a href="first-nations.html">🦅 First Nations</a>
+        <a href="transit.html">🚇 Transit Analytics</a>
+        <a href="power-platform.html">⚡ Power Platform</a>
+      </div>
+    </li>
+    <li class="nav-dropdown"><a href="about.html">Company</a>
+      <div class="nav-dropdown-menu">
+        <a href="about.html">About Us</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="blog.html">Blog</a>
+        <a href="data-governance.html">Data Governance</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+      </div>
+    </li>
+    <li><a href="index.html#government">Gov Bids</a></li>
+    <li><a href="mailto:hello@nullandvoid.ca" class="nav-pill">Start a project</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+    <a href="blog.html" style="font-family:var(--mono);font-size:11px;color:var(--text3);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color 0.2s;" onmouseover="this.style.color='var(--blue-light)'" onmouseout="this.style.color='var(--text3)'">← Back to Blog</a>
+    <span style="color:var(--text3);">·</span>
+    <span style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue-light);padding:3px 10px;background:var(--blue-glow);border:1px solid rgba(79,142,247,0.2);border-radius:100px;">First Nations</span>
+  </div>
+  <h1 style="font-size:clamp(32px,4.5vw,52px);">OCAP Principles in Practice: What Data Sovereignty Actually Looks Like</h1>
+  <div style="display:flex;align-items:center;gap:20px;margin-top:20px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;font-size:14px;">👤</div>
+      <div><div style="font-size:13px;font-weight:600;color:var(--text);">Null&amp;Void Analytics</div><div style="font-family:var(--mono);font-size:10px;color:var(--text3);">Principal Consultant</div></div>
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--text3);">February 28, 2026 · 8 min read</div>
+  </div>
+  <p class="lead" style="margin-top:28px;">When First Nations organizations ask about analytics, the first conversation is never about tools, vendors, or technology. It's about who owns the data. OCAP® — Ownership, Control, Access, and Possession — isn't a compliance checkbox. It's a fundamentally different way of thinking about how analytics systems get built, and who they ultimately serve.</p>
+</div>
+<div class="post-layout">
+  <article class="article">
+
+    <h2>Why the standard analytics approach doesn't work here</h2>
+    <p>Most analytics projects follow a predictable pattern: the organization identifies data requirements, a vendor builds a system, data flows from the organization's systems into the vendor's infrastructure or a third-party cloud, reports are generated, and the organization pays for access.</p>
+    <p>For First Nations organizations, every element of that pattern is a problem.</p>
+    <p>Data about community members — health records, wellness indicators, housing status, justice involvement — carries a weight of historical exploitation that goes far beyond ordinary privacy concerns. Indigenous data has been collected, used, and weaponized by governments and institutions for generations, often against the interests of the communities it describes. The right to own and control that data is not a technical preference. It's a sovereignty issue.</p>
+    <div class="pullquote">"The architecture follows the governance. Not the other way around."</div>
+    <h2>What each OCAP principle means in practice</h2>
+    <h3>Ownership</h3>
+    <p>The community owns the data about its members. Not the health authority. Not the federal government. Not the analytics vendor. This seems straightforward until you start designing a system — and realize it means the data cannot be stored anywhere the community doesn't control, cannot be accessed by any party the community hasn't explicitly authorized, and cannot be used for any purpose the community hasn't approved.</p>
+    <p>In practice, this shapes everything from the infrastructure decision (self-hosted vs cloud, whose Azure tenant) to the data sharing agreements (which external reports are permitted and which aren't) to the governance structure (who has the authority to approve new data uses).</p>
+    <h3>Control</h3>
+    <p>The Nation controls how data is collected, what it's used for, who can access it, and how it's shared. Before any technical work begins, we establish a governance framework with the Nation — typically involving the health director, the elected council, and community members who will use the system. This framework answers: What data is being collected? Who can see what? Under what circumstances can data leave the community's control? What happens if the project ends?</p>
+    <p>This governance document is not a nice-to-have. It is the design specification for the entire system. The architecture follows the governance, not the other way around.</p>
+    <h3>Access</h3>
+    <p>The community has the right to access its own data — and the right to determine who else does. In our systems, this means role-based access control that reflects the Nation's own governance structure, not an organizational chart from a software vendor. Community health workers see the data relevant to their work. Health directors see aggregated views. Council members see what the Nation has decided they should see. External parties — including us — see nothing by default.</p>
+    <h3>Possession</h3>
+    <p>Physical or digital custody of the data rests with the Nation. For communities with strong sovereignty requirements, this means hardware located on Nation land, running software the Nation owns, managed by staff the Nation employs or trains. Power BI Report Server on a server in the band office — not in a Microsoft datacenter in Ontario.</p>
+    <p>For communities more comfortable with cloud infrastructure, it still means the Nation's Azure tenant, with the Nation as the account holder, and contractual guarantees that the data never leaves Canadian soil.</p>
+    <h2>What this means for how we work</h2>
+    <p>Every First Nations engagement we take starts months before any data pipeline is built. We sit with the health director, the council, and the community members who will actually use the system. We ask a lot of questions and we listen carefully to the answers. We do not show up with a pre-built solution.</p>
+    <p>We also invest in capacity building. The goal of every First Nations analytics engagement we take is that when the project ends, the Nation owns the platform completely and has the internal knowledge to maintain and evolve it without us. That means training 2–3 internal staff as the primary administrators, writing documentation in plain language, and designing systems simple enough that non-technical staff can manage them.</p>
+    <p>The FNHA reporting automation we built for the Sto:lo Nation reduced their monthly reporting workload from 40 hours to 45 minutes. That's a real result. But the outcome we're most proud of is that they can now add new data elements, modify reports, and extend the system themselves — without calling us.</p>
+  
+    <div style="margin-top:48px;padding-top:32px;border-top:1px solid var(--border);">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;">Was this useful?</div>
+      <p>If you're dealing with a similar challenge in your BC organization, we're always happy to talk through the specifics. No pitch — just a practical conversation.</p>
+      <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
+        <a href="mailto:hello@nullandvoid.ca" class="btn-pri">Get in touch</a>
+        <a href="blog.html" class="btn-sec">More articles</a>
+      </div>
+    </div>
+  </article>
+  <aside class="article-sidebar">
+    <div class="aside-card">
+      <h4>About the Author</h4>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7;">23+ years in enterprise IT, 10+ years on the Microsoft data stack. Principal consultant at Null&amp;Void Analytics Inc., Langley, BC.</p>
+    </div>
+    <div class="aside-card">
+      <h4>Related Services</h4>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <a href="healthcare.html" style="color:var(--text2);text-decoration:none;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">🏥 Healthcare Analytics</a>
+        <a href="first-nations.html" style="color:var(--text2);text-decoration:none;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">🦅 First Nations</a>
+        <a href="power-platform.html" style="color:var(--text2);text-decoration:none;font-size:13px;padding:8px 0;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">⚡ Power Platform</a>
+      </div>
+    </div>
+    <div class="aside-card">
+      <h4>Start a Project</h4>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:14px;">Ready to talk about your data challenges?</p>
+      <a href="mailto:hello@nullandvoid.ca" style="display:block;background:var(--blue);color:#fff;text-align:center;padding:10px;border-radius:8px;text-decoration:none;font-family:var(--display);font-weight:600;font-size:13px;">Book a call</a>
+    </div>
+  </aside>
+</div>
+
+<footer>
+<div class="footer-inner">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo-name">Null<span>&amp;Void</span> Analytics Inc.</div>
+      <p>BC-based analytics consulting delivering data intelligence to public and private sector clients across British Columbia. Microsoft Azure certified.</p>
+    </div>
+    <div class="footer-col"><h5>Services</h5><ul>
+      <li><a href="healthcare.html">Healthcare Analytics</a></li>
+      <li><a href="justice.html">Justice &amp; Safety</a></li>
+      <li><a href="first-nations.html">First Nations</a></li>
+      <li><a href="transit.html">Transit Analytics</a></li>
+      <li><a href="power-platform.html">Power Platform</a></li>
+    </ul></div>
+    <div class="footer-col"><h5>Company</h5><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="data-governance.html">Data Governance</a></li>
+      <li><a href="privacy-policy.html">Privacy Policy</a></li>
+    </ul></div>
+    <div class="footer-col"><h5>Procurement</h5><ul>
+      <li><a href="https://bcbid.gov.bc.ca" target="_blank">BC Bid</a></li>
+      <li><a href="https://canadabuys.canada.ca" target="_blank">Canada Buys</a></li>
+      <li><a href="https://merx.com" target="_blank">MERX</a></li>
+      <li><a href="mailto:rfp@nullandvoid.ca">Submit an RFP</a></li>
+      <li><a href="mailto:hello@nullandvoid.ca">Contact Us</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Null&amp;Void Analytics Inc. · Langley, BC · Federal Corp. · GST Registered · nullandvoid.ca</span>
+    <span>Azure Certified · Power BI Partner · FOIPPA Compliant</span>
+  </div>
+</div>
+</footer>
+<script>
+var obs=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in')})},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+</script>
+</body>
+</html>

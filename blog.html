@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Practical insights on Power BI, Azure data engineering, healthcare analytics, and government analytics in BC.">
+<title>Blog — Null&amp;Void Analytics Inc.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#0c1220;--navy2:#101929;
+  --card:#18243a;--card2:#1d2c45;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --blue:#4f8ef7;--blue-light:#7aaefb;--blue-glow:rgba(79,142,247,0.14);
+  --cyan:#22d3ee;--emerald:#10b981;--amber:#f59e0b;--red:#f87171;
+  --text:#e8edf8;--text2:#8fa3c8;--text3:#4a607f;
+  --mono:'JetBrains Mono',monospace;
+  --display:'Outfit',sans-serif;
+  --body:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--navy);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.75;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(79,142,247,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(79,142,247,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;align-items:center;padding:0 52px;justify-content:space-between;background:rgba(12,18,32,0.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.logo-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;flex-shrink:0;}
+.logo-name{font-family:var(--display);font-size:16px;font-weight:700;color:var(--text);line-height:1;}
+.logo-name span{color:var(--blue-light);}
+.logo-sub{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
+nav ul{list-style:none;display:flex;align-items:center;gap:32px;}
+nav ul a{color:var(--text2);text-decoration:none;font-size:14px;font-weight:400;transition:color 0.2s;}
+nav ul a:hover{color:var(--text);}
+.has-dropdown{position:relative;}
+.has-dropdown>a::after{content:' ▾';font-size:10px;}
+.dropdown{display:none;position:absolute;top:100%;left:0;padding-top:12px;min-width:220px;z-index:300;}
+.dropdown-inner{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:8px;box-shadow:0 20px 60px rgba(0,0,0,0.4);display:flex;flex-direction:column;gap:2px;}
+.has-dropdown:hover .dropdown{display:block;}
+.dropdown a{display:block;padding:9px 14px;color:var(--text2);text-decoration:none;font-size:13px;border-radius:8px;transition:all 0.15s;white-space:nowrap;}
+.dropdown a:hover{background:var(--blue-glow);color:var(--blue-light);}
+.nav-pill{background:var(--blue)!important;color:#fff!important;padding:9px 22px;border-radius:100px;font-weight:600!important;font-size:13px!important;transition:all 0.2s!important;}
+.nav-pill:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(79,142,247,0.4)!important;}
+
+/* ── FOOTER ── */
+footer{background:var(--navy);border-top:1px solid var(--border);padding:56px 52px 36px;position:relative;z-index:1;}
+.footer-inner{max-width:1240px;margin:0 auto;}
+.footer-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:52px;margin-bottom:44px;}
+.footer-logo-name{font-family:var(--display);font-size:16px;font-weight:700;color:var(--text);}
+.footer-logo-name span{color:var(--blue-light);}
+.footer-brand p{color:var(--text3);font-size:13px;line-height:1.7;font-weight:300;margin-top:14px;max-width:240px;}
+.footer-col h5{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:16px;}
+.footer-col ul{list-style:none;}
+.footer-col ul li{margin-bottom:9px;}
+.footer-col ul li a{color:var(--text2);text-decoration:none;font-size:13px;font-weight:300;transition:color 0.2s;}
+.footer-col ul li a:hover{color:var(--text);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--border);font-size:12px;color:var(--text3);}
+.footer-bottom span{font-family:var(--mono);font-size:10px;letter-spacing:0.5px;}
+
+/* ── PAGE HERO ── */
+.page-hero{padding:140px 52px 72px;max-width:1240px;margin:0 auto;position:relative;z-index:1;}
+.ph-kicker{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--blue-light);letter-spacing:2px;text-transform:uppercase;margin-bottom:18px;}
+.ph-kicker::before{content:'';width:20px;height:1px;background:var(--blue);}
+h1{font-family:var(--display);font-size:clamp(38px,5vw,60px);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:20px;color:var(--text);}
+h1 em{font-style:normal;color:var(--blue-light);}
+.lead{font-size:17px;color:var(--text2);line-height:1.7;font-weight:300;max-width:580px;}
+
+/* ── BLOG LAYOUT ── */
+.blog-grid{max-width:1240px;margin:0 auto;padding:0 52px 80px;display:grid;grid-template-columns:2fr 1fr;gap:48px;position:relative;z-index:1;align-items:start;}
+
+/* ── ARTICLE CARDS ── */
+.article-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:border-color 0.25s,box-shadow 0.25s;margin-bottom:28px;}
+.article-card:hover{border-color:var(--border2);box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+.article-header{padding:36px 40px 0;}
+.article-meta{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.article-tag{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:100px;border:1px solid;}
+.at-bi{background:rgba(79,142,247,0.08);border-color:rgba(79,142,247,0.25);color:var(--blue-light);}
+.at-nations{background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.25);color:var(--emerald);}
+.at-health{background:rgba(34,211,238,0.08);border-color:rgba(34,211,238,0.25);color:var(--cyan);}
+.at-gov{background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.25);color:var(--amber);}
+.article-date{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:1px;}
+.article-title{font-family:var(--display);font-size:clamp(20px,2.5vw,26px);font-weight:800;letter-spacing:-0.5px;line-height:1.2;margin-bottom:14px;color:var(--text);}
+.article-excerpt{font-size:15px;color:var(--text2);font-weight:300;line-height:1.75;margin-bottom:20px;}
+
+/* ── ARTICLE BODY (collapsed by default) ── */
+.article-body{max-height:0;overflow:hidden;transition:max-height 0.5s ease;}
+.article-body.expanded{max-height:9999px;}
+.article-body-inner{padding:0 40px 4px;}
+.article-body-inner h3{font-family:var(--display);font-size:18px;font-weight:700;margin:28px 0 12px;color:var(--text);}
+.article-body-inner p{font-size:15px;color:var(--text2);font-weight:300;line-height:1.8;margin-bottom:16px;}
+.article-body-inner ul{list-style:none;display:flex;flex-direction:column;gap:10px;margin:12px 0 20px;}
+.article-body-inner ul li{font-size:15px;color:var(--text2);font-weight:300;display:flex;gap:10px;line-height:1.65;}
+.article-body-inner ul li::before{content:'→';color:var(--text3);font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:3px;}
+.article-body-inner blockquote{border-left:3px solid var(--blue);padding:14px 20px;margin:20px 0;background:rgba(79,142,247,0.06);border-radius:0 10px 10px 0;}
+.article-body-inner blockquote p{color:var(--text);font-size:16px;font-style:italic;font-weight:400;margin-bottom:0;}
+.article-body-inner strong{color:var(--text);font-weight:600;}
+
+/* ── ARTICLE FOOTER ── */
+.article-footer{padding:20px 40px 28px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.read-toggle{background:none;border:none;color:var(--blue-light);font-size:14px;cursor:pointer;font-family:var(--body);font-weight:500;display:flex;align-items:center;gap:8px;transition:gap 0.2s;padding:0;}
+.read-toggle:hover{gap:12px;}
+.read-toggle svg{transition:transform 0.3s;flex-shrink:0;}
+.share-link{font-family:var(--mono);font-size:10px;color:var(--text3);text-decoration:none;letter-spacing:1px;transition:color 0.2s;}
+.share-link:hover{color:var(--blue-light);}
+
+/* ── SIDEBAR ── */
+.sidebar{display:flex;flex-direction:column;gap:20px;position:sticky;top:88px;}
+.sidebar-widget{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;}
+.sw-title{font-family:var(--display);font-size:14px;font-weight:700;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);color:var(--text);}
+.cat-list{list-style:none;display:flex;flex-direction:column;gap:2px;}
+.cat-list li a{display:flex;justify-content:space-between;align-items:center;color:var(--text2);text-decoration:none;font-size:13px;padding:9px 10px;border-radius:8px;transition:all 0.15s;}
+.cat-list li a:hover{background:var(--blue-glow);color:var(--text);}
+.cat-count{font-family:var(--mono);font-size:10px;color:var(--text3);}
+.contact-btn{display:block;background:var(--blue);color:#fff;text-align:center;padding:11px;border-radius:8px;text-decoration:none;font-family:var(--display);font-weight:600;font-size:13px;transition:all 0.2s;}
+.contact-btn:hover{opacity:0.88;transform:translateY(-1px);}
+.contact-btn.sec{background:transparent;border:1px solid var(--border2);color:var(--text2);margin-top:10px;}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.reveal.in{opacity:1;transform:none;}
+
+@media(max-width:1024px){.blog-grid{grid-template-columns:1fr;}.sidebar{position:static;}.footer-grid{grid-template-columns:1fr 1fr;gap:36px;}}
+@media(max-width:768px){nav{padding:0 20px;}nav ul{display:none;}.page-hero{padding:110px 20px 52px;}.blog-grid{padding:0 20px 60px;}.article-header,.article-body-inner,.article-footer{padding-left:24px;padding-right:24px;}footer{padding:40px 20px 24px;}.footer-grid{grid-template-columns:1fr;gap:28px;}.footer-bottom{flex-direction:column;gap:8px;text-align:center;}}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <rect x="2" y="2" width="5" height="5" rx="1.5" fill="rgba(255,255,255,0.85)"/>
+        <rect x="9" y="2" width="5" height="5" rx="1.5" fill="rgba(255,255,255,0.45)"/>
+        <rect x="2" y="9" width="5" height="5" rx="1.5" fill="rgba(255,255,255,0.45)"/>
+        <rect x="9" y="9" width="5" height="5" rx="1.5" fill="rgba(255,255,255,0.85)"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-name">Null<span>&amp;Void</span></div>
+      <div class="logo-sub">Analytics Inc.</div>
+    </div>
+  </a>
+  <ul>
+    <li class="has-dropdown">
+      <a href="#">Services</a>
+      <div class="dropdown">
+        <div class="dropdown-inner">
+          <a href="healthcare.html">🏥 Healthcare Analytics</a>
+          <a href="justice.html">⚖️ Justice &amp; Safety</a>
+          <a href="first-nations.html">🦅 First Nations</a>
+          <a href="transit.html">🚇 Transit Analytics</a>
+          <a href="power-platform.html">⚡ Power Platform</a>
+        </div>
+      </div>
+    </li>
+    <li class="has-dropdown">
+      <a href="#">Company</a>
+      <div class="dropdown">
+        <div class="dropdown-inner">
+          <a href="about.html">👤 About</a>
+          <a href="portfolio.html">📁 Portfolio</a>
+          <a href="blog.html">✍️ Blog</a>
+          <a href="data-governance.html">🔒 Data Governance</a>
+          <a href="privacy.html">🔐 Privacy Policy</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="mailto:hello@nullandvoid.ca" class="nav-pill">Start a project</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="page-hero">
+  <div class="ph-kicker">Blog</div>
+  <h1>Insights on <em>public sector</em> analytics</h1>
+  <p class="lead">Practical perspectives on Power BI, Azure data engineering, healthcare analytics, First Nations data sovereignty, and government analytics in British Columbia.</p>
+</div>
+
+<!-- ── BLOG GRID ── -->
+<div class="blog-grid">
+<div class="articles-col">
+
+  <!-- ═══ ARTICLE 1 ═══ -->
+  <div class="article-card reveal">
+    <div class="article-header">
+      <div class="article-meta">
+        <span class="article-tag at-bi">Power BI</span>
+        <span class="article-date">March 12, 2026 · 8 min read</span>
+      </div>
+      <div class="article-title">Why Most Government Power BI Reports Fail — And What to Do About It</div>
+      <div class="article-excerpt">After working on analytics projects across BC's public sector, the same pattern appears over and over. A ministry or health authority invests in Power BI. They build reports. And six months later, nobody's looking at them. Here's why — and what actually works.</div>
+    </div>
+    <div class="article-body" id="body-1">
+      <div class="article-body-inner">
+        <h3>The failure is almost never the technology</h3>
+        <p>It's tempting to blame the tool — Power BI, Tableau, whatever was chosen. But after delivering analytics platforms across BC's health authorities, justice sector, and government ministries, I've never seen a project fail because Power BI wasn't capable enough. The failures are almost always human, structural, or architectural.</p>
+        <h3>Failure mode 1: They built what they could measure, not what decisions needed to be made</h3>
+        <p>The most common failure: starting with the data you have instead of the decisions you need to make. A report full of numbers is not a decision tool. A report that tells a specific person — a charge nurse, a deputy minister, a caseworker — whether to act right now is a decision tool.</p>
+        <p>When I start a new engagement, the first question I ask stakeholders is not "what data do you have?" It's "what's the last decision you made that you wish you'd had better information for?" The answer tells me everything I need to know about what to build.</p>
+        <blockquote><p>"A report full of numbers is not a decision tool. A report that tells a specific person whether to act right now — that's a decision tool."</p></blockquote>
+        <h3>Failure mode 2: The data refresh is too slow to matter</h3>
+        <p>A report that updates once a week showing last week's emergency department census is a history lesson. It cannot change anyone's behaviour today. A report updating every 15 minutes showing today's capacity by unit and predicted surge times — that changes how a charge nurse allocates staff in the next two hours.</p>
+        <p>The refresh rate should be determined by the decision cadence. If the decision needs to be made daily, update daily. If it needs to be made hourly, update hourly. Azure Data Factory and Power BI's incremental refresh make this straightforward once the architecture is right.</p>
+        <h3>Failure mode 3: The report was built for the person who reports, not the person who acts</h3>
+        <p>Most organizational reports are built for whoever needs to demonstrate progress upward in the hierarchy. The language is aggregate, the timeframe is monthly, and the audience is leadership. But the people who can actually change the numbers are often frontline workers — charge nurses, caseworkers, transit dispatchers — who need different information, at different frequency, in a different format.</p>
+        <ul>
+          <li>Build separate report views for different roles — with row-level security ensuring each sees only what's relevant to them.</li>
+          <li>Involve frontline staff in dashboard design, not just executive approval. Their feedback in week 2 is worth more than a VP sign-off in week 8.</li>
+          <li>Ask: would this person look at this report before making a decision, or after? If after, it's not a decision tool — it's a reporting obligation.</li>
+        </ul>
+        <h3>Failure mode 4: Nobody was trained, so nobody uses it</h3>
+        <p>Deploying Power BI is not the end of the project — it's the beginning. If frontline staff don't understand what they're looking at, don't trust the numbers, or don't know how to interpret what the report is telling them to do, the dashboard becomes wallpaper within 60 days of launch.</p>
+        <p>Budget training hours equal to 20% of development hours. Minimum. Not a one-hour "here's how to filter" session — structured training that covers what each metric means, what threshold should trigger an action, and who to contact when something looks wrong.</p>
+        <h3>What actually works</h3>
+        <ul>
+          <li>Start with one specific decision. Build the report backward from there. Expand scope only after the first report is genuinely being used.</li>
+          <li>Put the data refresh rate in the Statement of Work. Make it a requirement, not an afterthought.</li>
+          <li>Design for the person who needs to act — not the person who needs to report.</li>
+          <li>Budget training hours at 20% of development hours. Minimum.</li>
+          <li>Schedule a 60-day post-launch review. What's being used? What isn't? Why?</li>
+        </ul>
+        <p>The technology isn't the hard part. The discipline to keep the project anchored to real decisions — through every requirements meeting, every design review, every stakeholder pressure to add "just one more metric" — that's the hard part. And it's worth it.</p>
+      </div>
+    </div>
+    <div class="article-footer">
+      <button class="read-toggle" onclick="toggleArticle('body-1',this)">
+        Read full article
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://nullandvoid.ca/blog.html" target="_blank" class="share-link">SHARE ON LINKEDIN</a>
+    </div>
+  </div>
+
+  <!-- ═══ ARTICLE 2 ═══ -->
+  <div class="article-card reveal">
+    <div class="article-header">
+      <div class="article-meta">
+        <span class="article-tag at-nations">First Nations</span>
+        <span class="article-date">February 28, 2026 · 10 min read</span>
+      </div>
+      <div class="article-title">OCAP® in Practice: What Data Sovereignty Actually Looks Like When You Build It Properly</div>
+      <div class="article-excerpt">OCAP® — Ownership, Control, Access, and Possession — is not a checkbox. It's a fundamentally different way of thinking about how analytics systems get built. Here's what it actually means in practice, and why getting it wrong is both an ethical failure and a project failure.</div>
+    </div>
+    <div class="article-body" id="body-2">
+      <div class="article-body-inner">
+        <h3>The conversation most vendors don't have</h3>
+        <p>When First Nations organizations ask about data analytics, the first conversation with most technology vendors is about tools: "we use Power BI" or "our platform runs on Azure." The first conversation with us is about governance: who owns this data, who controls how it's used, and what happens to it when we're gone?</p>
+        <p>That difference isn't just ethical. It's the difference between a platform a community will use and trust indefinitely, and one that gets abandoned the moment the vendor relationship ends.</p>
+        <h3>What each OCAP® principle means architecturally</h3>
+        <p><strong>Ownership:</strong> The community collectively owns the information generated about its members, families, and territory. This means data cannot be stored in a vendor's cloud subscription, a federal database, or a provincial system that the Nation doesn't control. We deploy all data to infrastructure that is legally and technically owned by the Nation.</p>
+        <p><strong>Control:</strong> The Nation controls how data is collected, who accesses it, how it's used, and what happens to it when a project ends. In practice, this means we build the governance framework before we write a single line of code. The governance is specified by the Nation, not designed by us.</p>
+        <p><strong>Access:</strong> Community members have the right to access data about themselves. Community leadership determines who else does. In our platforms, this means role-based access control built around the Nation's actual governance structure — not a generic healthcare hierarchy or a government org chart.</p>
+        <p><strong>Possession:</strong> Physical or digital custody of the data lives with the Nation. For many communities, this means on-premise deployment: Power BI Report Server and SQL Server running on hardware that the Nation owns and controls, located on Nation territory.</p>
+        <blockquote><p>"The governance is specified by the Nation, not designed by us. Our job is to implement what they decide — not to decide what they should have."</p></blockquote>
+        <h3>Why cloud-first is not always the right answer</h3>
+        <p>The technology industry has a strong bias toward cloud deployment. It's often faster, more scalable, and simpler to maintain. For some First Nations communities, cloud deployment requires trusting a corporation — often a foreign-owned one — with data about community members' health, justice involvement, and family situation. That's not a technology decision. It's a sovereignty decision, and it's the community's to make.</p>
+        <p>We've delivered platforms in three configurations: fully self-hosted on Nation-owned hardware, Nation-controlled Azure tenant, and hybrid approaches where aggregate data is in the cloud but identifiable records remain on-premise. The right answer depends on the community's connectivity, IT capacity, and governance preferences — not our preference for what's easiest to deploy.</p>
+        <h3>The mistake most analytics projects make with Indigenous data</h3>
+        <p>The most common mistake: treating Indigenous clients the same as any other government client — building a standard cloud platform, connecting it to federal and provincial databases, and delivering a dashboard that the community's health workers use to input data that flows to a system the community doesn't control. This is not an analytics platform. It's a data collection system that happens to show the community some of what it's collected. The distinction matters enormously.</p>
+        <h3>How we actually start First Nations engagements</h3>
+        <ul>
+          <li>We start with a governance conversation with Nation leadership — before any technical discussion. Who needs to approve this? What data will be collected? Who can see it? What happens at project end?</li>
+          <li>We ask to speak with Elders and health directors, not just IT contacts or procurement officers.</li>
+          <li>We do not begin any data pipeline development until a Privacy Impact Assessment is complete and approved by the Nation.</li>
+          <li>We train internal Nation staff to operate, maintain, and evolve the platform — the goal of every engagement is to make ourselves unnecessary, not indispensable.</li>
+        </ul>
+        <p>The result: platforms that communities trust, that serve their actual needs, and that continue functioning and growing long after the engagement ends. That's what OCAP® looks like when you actually implement it.</p>
+      </div>
+    </div>
+    <div class="article-footer">
+      <button class="read-toggle" onclick="toggleArticle('body-2',this)">
+        Read full article
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://nullandvoid.ca/blog.html" target="_blank" class="share-link">SHARE ON LINKEDIN</a>
+    </div>
+  </div>
+
+  <!-- ═══ ARTICLE 3 ═══ -->
+  <div class="article-card reveal">
+    <div class="article-header">
+      <div class="article-meta">
+        <span class="article-tag at-gov">Government</span>
+        <span class="article-date">January 30, 2026 · 7 min read</span>
+      </div>
+      <div class="article-title">How to Respond to a Government RFP for Analytics — And Actually Win</div>
+      <div class="article-excerpt">BC government RFPs for analytics and data services are won and lost on execution details — not on technical capability. After years on both sides of the evaluation table, here are the things that actually determine whether your bid scores in the top tier.</div>
+    </div>
+    <div class="article-body" id="body-3">
+      <div class="article-body-inner">
+        <h3>The evaluator's reality</h3>
+        <p>Government procurement evaluators are experienced, well-intentioned professionals who are also deeply busy. They're evaluating your bid in addition to their regular job. They have a scoring rubric. They're looking for clear, direct evidence that your proposal satisfies specific criteria — they are not looking for creativity, narrative flair, or impressive-sounding technical jargon.</p>
+        <p>The single most important frame for writing a government analytics bid: make the evaluator's job easy. Every section of your proposal should be structured so that someone can read it, look at their scoring rubric, and immediately identify where you've addressed each criterion.</p>
+        <h3>Read the RFP three times before writing anything</h3>
+        <p>This sounds obvious. Most vendors do it once, quickly, then start writing. Read it three times with different questions in mind:</p>
+        <ul>
+          <li>First read: What are the Mandatory Requirements? These are pass/fail — missing even one gets you disqualified regardless of how good the rest of the bid is.</li>
+          <li>Second read: What are the Rated Criteria and how are they weighted? These tell you exactly where to invest your writing effort.</li>
+          <li>Third read: What does the language tell you about the client's actual concerns? The words they choose reveal what they've been burned by before.</li>
+        </ul>
+        <h3>Mirror their exact language</h3>
+        <p>If the RFP asks for "demonstrated experience delivering Power BI dashboards in a healthcare setting" — your section heading should be: <strong>Demonstrated Experience Delivering Power BI Dashboards in a Healthcare Setting.</strong> Evaluators are scoring against their rubric. If they're looking for that phrase and it's not in your proposal, they may score you lower even if the capability is clearly described elsewhere.</p>
+        <blockquote><p>"The single most important frame for writing a government analytics bid: make the evaluator's job easy."</p></blockquote>
+        <h3>Quantify everything. Every claim.</h3>
+        <p>The difference between scoring 8/10 and 10/10 on an experience criterion is almost always the presence of quantified results.</p>
+        <ul>
+          <li>"Reduced emergency department report generation time by 97%" scores higher than "improved reporting efficiency."</li>
+          <li>"Delivered a platform to a 1,200-bed regional health authority" scores higher than "worked with a large BC health organization."</li>
+          <li>"94% forecast accuracy validated against 18 months of holdout data" scores higher than "high-accuracy forecasting capability."</li>
+        </ul>
+        <h3>Address compliance explicitly, not implicitly</h3>
+        <p>Healthcare and government RFPs always include compliance requirements — FOIPPA, PHIA, security standards, data residency. Don't assume evaluators will infer that you're compliant. State it explicitly: <em>"All data will be stored and processed within BC Azure Government Cloud regions. A PHIA-compliant Privacy Impact Assessment will be completed prior to any data pipeline development."</em></p>
+        <p>Add a compliance confirmation table: one column for the requirement, one column for your status (✓ Compliant), one column pointing to where in the proposal you've addressed it. This alone can move you from shortlisted to selected.</p>
+        <h3>Submit 24 hours early</h3>
+        <p>Government portals have hard timestamp cutoffs. Submissions received one second late are rejected without exception or appeal. Portal systems get slow near deadlines as multiple vendors submit simultaneously. Technical failures on submission day are not accepted as grounds for extension. Submit 24 hours early. Every time. No exceptions.</p>
+        <h3>Request a debrief after every bid — win or lose</h3>
+        <p>Government clients must provide debrief meetings when requested. This is one of the most underutilized tools in government contracting. A debrief tells you exactly how your proposal was scored, where you lost points, and what the winning bid did differently. Three properly debriefed losses will teach you more about government procurement than any book or course.</p>
+      </div>
+    </div>
+    <div class="article-footer">
+      <button class="read-toggle" onclick="toggleArticle('body-3',this)">
+        Read full article
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://nullandvoid.ca/blog.html" target="_blank" class="share-link">SHARE ON LINKEDIN</a>
+    </div>
+  </div>
+
+</div><!-- /articles-col -->
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+
+  <div class="sidebar-widget reveal">
+    <div class="sw-title">Categories</div>
+    <ul class="cat-list">
+      <li><a href="#"><span>Power BI</span><span class="cat-count">1</span></a></li>
+      <li><a href="#"><span>First Nations</span><span class="cat-count">1</span></a></li>
+      <li><a href="#"><span>Government Bidding</span><span class="cat-count">1</span></a></li>
+      <li><a href="healthcare.html"><span>Healthcare</span><span class="cat-count">→</span></a></li>
+      <li><a href="data-governance.html"><span>Data Governance</span><span class="cat-count">→</span></a></li>
+    </ul>
+  </div>
+
+  <div class="sidebar-widget reveal">
+    <div class="sw-title">Get in touch</div>
+    <p style="font-size:13px;color:var(--text2);font-weight:300;line-height:1.65;margin-bottom:16px;">Questions about any article, or want to discuss your BC analytics challenge?</p>
+    <a href="mailto:hello@nullandvoid.ca" class="contact-btn">Ask a question</a>
+    <a href="mailto:rfp@nullandvoid.ca" class="contact-btn sec">Submit an RFP</a>
+  </div>
+
+</aside>
+</div><!-- /blog-grid -->
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-name">Null<span>&amp;Void</span> Analytics Inc.</div>
+        <p>BC-based analytics consulting delivering data intelligence to public and private sector clients across British Columbia. Microsoft Azure certified.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="healthcare.html">Healthcare Analytics</a></li>
+          <li><a href="justice.html">Justice &amp; Safety</a></li>
+          <li><a href="first-nations.html">First Nations</a></li>
+          <li><a href="transit.html">Transit Analytics</a></li>
+          <li><a href="power-platform.html">Power Platform</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="data-governance.html">Data Governance</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Procurement</h5>
+        <ul>
+          <li><a href="https://bcbid.gov.bc.ca" target="_blank">BC Bid</a></li>
+          <li><a href="https://canadabuys.canada.ca" target="_blank">Canada Buys</a></li>
+          <li><a href="https://merx.com" target="_blank">MERX</a></li>
+          <li><a href="mailto:rfp@nullandvoid.ca">Submit an RFP</a></li>
+          <li><a href="mailto:hello@nullandvoid.ca">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Null&amp;Void Analytics Inc. &middot; Langley, BC &middot; Federal Corp. &middot; GST Registered</span>
+      <span>Azure Certified &middot; Power BI Partner &middot; FOIPPA Compliant</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleArticle(id, btn) {
+  var body = document.getElementById(id);
+  var isOpen = body.classList.contains('expanded');
+  body.classList.toggle('expanded');
+  var svg = btn.querySelector('svg');
+  if (svg) svg.style.transform = isOpen ? '' : 'rotate(180deg)';
+  // Find text node and update label
+  for (var i = 0; i < btn.childNodes.length; i++) {
+    if (btn.childNodes[i].nodeType === 3 && btn.childNodes[i].textContent.trim()) {
+      btn.childNodes[i].textContent = isOpen ? ' Read full article ' : ' Hide article ';
+      break;
+    }
+  }
+}
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+</script>
+</body>
+</html>
